@@ -64,10 +64,10 @@ public class ServiceTests {
                 )
             """);
         }
-        movieDao     = new MovieDao(conn);
-        customerDao  = new CustomerDao(conn);
-        eventDao     = new RentalEventDao(conn);
-        movieService = new MovieService(movieDao);
+        movieDao      = new MovieDao(conn);
+        customerDao   = new CustomerDao(conn);
+        eventDao      = new RentalEventDao(conn);
+        movieService  = new MovieService(movieDao);
         rentalService = new RentalEventService(eventDao, movieDao);
     }
 
@@ -91,47 +91,47 @@ public class ServiceTests {
         movieDao.addMovie(new Movie(0, "B", "D2", 2002, "G2", 8.0, true, 120, "R"));
         movieDao.addMovie(new Movie(0, "C", "D1", 2003, "G3", 3.0, true, 60, "G"));
 
-        // duration between 80 and 130 -> only B
-        List<Movie> byDuration = movieService.findByDurationRange(80, 130);
-        assertEquals(1, byDuration.size());
+        // duration between 100 and 125 -> only B
+        List<Movie> byDuration = movieService.findByDurationRange(100, 125);
+        assertEquals(1, byDuration.size(), "Only movie B should match duration range 100–125");
         assertEquals("B", byDuration.get(0).getTitle());
 
         // max price 5.0 -> A and C
         List<Movie> byPrice = movieService.findByMaxPrice(5.0);
-        assertEquals(2, byPrice.size());
+        assertEquals(2, byPrice.size(), "Movies A and C should have rentalPricePerDay ≤ 5.0");
 
         // specific title/director
         List<Movie> byTD = movieService.findByTitleAndDirector("C", "D1");
-        assertEquals(1, byTD.size());
+        assertEquals(1, byTD.size(), "Only movie C directed by D1 should match");
         assertEquals("C", byTD.get(0).getTitle());
     }
 
     @Test
     void testRentalEventServiceLifecycle() throws SQLException {
-        // előkészítjük az ügyfelet és filmet
+        // prepare customer and movie
         customerDao.addCustomer(new Customer(0, "X", "Y", "x@y.com", "000", "IDX", "HU"));
         int custId = customerDao.getAllCustomers().get(0).getId();
 
         movieDao.addMovie(new Movie(0, "M1", "Dir", 2020, "G", 10.0, true, 100, "PG"));
         int movId = movieDao.getAllMovies().get(0).getId();
 
-        // 1) Kölcsönzés
+        // 1) Rent
         rentalService.rentMovie(movId, custId, LocalDate.now());
         Movie afterRent = movieDao.getMovieById(movId);
-        assertFalse(afterRent.isAvailable(), "A filmnek nem szabad elérhetőnek lennie kölcsönzés után");
+        assertFalse(afterRent.isAvailable(), "Movie should be unavailable after renting");
 
         List<RentalEvent> events = eventDao.getAllRentalEvents();
         assertEquals(1, events.size());
         RentalEvent ev = events.get(0);
-        assertFalse(ev.isClosed());
+        assertFalse(ev.isClosed(), "RentalEvent should be open initially");
 
-        // 2) Visszaadás
+        // 2) Return
         rentalService.returnMovie(ev.getId(), LocalDate.now().plusDays(2), 20.0);
         Movie afterReturn = movieDao.getMovieById(movId);
-        assertTrue(afterReturn.isAvailable(), "A filmnek elérhetőnek kell lennie visszaadás után");
+        assertTrue(afterReturn.isAvailable(), "Movie should be available after returning");
 
         RentalEvent updatedEv = eventDao.getAllRentalEvents().get(0);
-        assertTrue(updatedEv.isClosed());
-        assertEquals(20.0, updatedEv.getTotalCost());
+        assertTrue(updatedEv.isClosed(), "RentalEvent should be closed after return");
+        assertEquals(20.0, updatedEv.getTotalCost(), "Total cost should be recorded");
     }
 }
