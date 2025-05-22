@@ -1,53 +1,51 @@
 package hu.vantus.movierental.model;
 
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 public class RentalEvent {
-    private int id;
-    private int movieId;
-    private int customerId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    private Customer customer;
+
+    @ManyToOne
+    private Movie movie;
+
     private LocalDate rentalDate;
+
     private LocalDate returnDate;
-    private double totalCost;
-    private boolean isClosed;
 
-    public RentalEvent() {}
+    private boolean returned; // ← Hozzáadva
 
-    public RentalEvent(int id, int movieId, int customerId, LocalDate rentalDate,
-                       LocalDate returnDate, double totalCost, boolean isClosed) {
-        this.id = id;
-        this.movieId = movieId;
-        this.customerId = customerId;
-        this.rentalDate = rentalDate;
-        this.returnDate = returnDate;
-        this.totalCost = totalCost;
-        this.isClosed = isClosed;
-    }
+    // --- Getters & Setters ---
 
-    // Getters & Setters
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getMovieId() {
-        return movieId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setMovieId(int movieId) {
-        this.movieId = movieId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public int getCustomerId() {
-        return customerId;
+    public Movie getMovie() {
+        return movie;
     }
 
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
+    public void setMovie(Movie movie) {
+        this.movie = movie;
     }
 
     public LocalDate getRentalDate() {
@@ -66,32 +64,11 @@ public class RentalEvent {
         this.returnDate = returnDate;
     }
 
-    public double getTotalCost() {
-        return totalCost;
+    public boolean isReturned() {
+        return returned;
     }
 
-    public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
-    }
-
-    public boolean isClosed() {
-        return isClosed;
-    }
-
-    public void setClosed(boolean closed) {
-        isClosed = closed;
-    }
-
-    @Override
-    public String toString() {
-        return "RentalEvent{" +
-                "id=" + id +
-                ", movieId=" + movieId +
-                ", customerId=" + customerId +
-                ", rentalDate=" + rentalDate +
-                ", returnDate=" + returnDate +
-                ", totalCost=" + totalCost +
-                ", isClosed=" + isClosed +
-                '}';
+    public void setReturned(boolean returned) {
+        this.returned = returned;
     }
 }

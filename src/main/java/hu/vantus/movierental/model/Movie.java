@@ -1,38 +1,30 @@
 package hu.vantus.movierental.model;
 
+import jakarta.persistence.*;
+import java.time.LocalDate;
+
+@Entity
 public class Movie {
-    private int id;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String title;
-    private String director;
-    private int releaseYear;
+
     private String genre;
-    private double rentalPricePerDay;
+
+    private LocalDate releaseDate;
+
     private boolean available;
-    private int durationMinutes;
-    private String ageRating;
 
-    public Movie() {}
+    // --- Getters & Setters ---
 
-    public Movie(int id, String title, String director, int releaseYear, String genre,
-                 double rentalPricePerDay, boolean available, int durationMinutes, String ageRating) {
-        this.id = id;
-        this.title = title;
-        this.director = director;
-        this.releaseYear = releaseYear;
-        this.genre = genre;
-        this.rentalPricePerDay = rentalPricePerDay;
-        this.available = available;
-        this.durationMinutes = durationMinutes;
-        this.ageRating = ageRating;
-    }
-
-    // Getters and setters
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -44,22 +36,6 @@ public class Movie {
         this.title = title;
     }
 
-    public String getDirector() {
-        return director;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
-    }
-
-    public int getReleaseYear() {
-        return releaseYear;
-    }
-
-    public void setReleaseYear(int releaseYear) {
-        this.releaseYear = releaseYear;
-    }
-
     public String getGenre() {
         return genre;
     }
@@ -68,12 +44,12 @@ public class Movie {
         this.genre = genre;
     }
 
-    public double getRentalPricePerDay() {
-        return rentalPricePerDay;
+    public LocalDate getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setRentalPricePerDay(double rentalPricePerDay) {
-        this.rentalPricePerDay = rentalPricePerDay;
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public boolean isAvailable() {
@@ -82,36 +58,5 @@ public class Movie {
 
     public void setAvailable(boolean available) {
         this.available = available;
-    }
-
-    public int getDurationMinutes() {
-        return durationMinutes;
-    }
-
-    public void setDurationMinutes(int durationMinutes) {
-        this.durationMinutes = durationMinutes;
-    }
-
-    public String getAgeRating() {
-        return ageRating;
-    }
-
-    public void setAgeRating(String ageRating) {
-        this.ageRating = ageRating;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", director='" + director + '\'' +
-                ", releaseYear=" + releaseYear +
-                ", genre='" + genre + '\'' +
-                ", rentalPricePerDay=" + rentalPricePerDay +
-                ", available=" + available +
-                ", durationMinutes=" + durationMinutes +
-                ", ageRating='" + ageRating + '\'' +
-                '}';
     }
 }
