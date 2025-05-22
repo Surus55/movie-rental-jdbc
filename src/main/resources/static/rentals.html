@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <title>Filmkölcsönzés</title>
+</head>
+<body>
+<h1>Filmkölcsönzés</h1>
+
+<h2>Új kölcsönzés</h2>
+<label for="customerSelect">Ügyfél:</label>
+<select id="customerSelect"></select>
+<br>
+<label for="movieSelect">Film:</label>
+<select id="movieSelect"></select>
+<br>
+<button onclick="rentMovie()">Kölcsönöz</button>
+
+<h2>Filmek visszahozása</h2>
+<label for="returnRentalId">Kölcsönzés ID</label>
+<input type="number" id="returnRentalId">
+<button onclick="returnMovie()">Visszahoz</button>
+
+<h2>Összes kölcsönzés</h2>
+<ul id="rentalList"></ul>
+
+<script src="/js/rentals.js"></script>
+</body>
+</html>
